@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BasketMapper">
+	<resultMap type="basket" id="basketMap">
+		<result property="basketNo"		column="basket_no"			jdbcType="NUMERIC"/>
+		<result property="userId"		column="user_id"			jdbcType="VARCHAR"/>
+		<result property="prodNo"		column="prod_no"			jdbcType="NUMERIC"/>
+		<result property="prodName"		column="prod_name"			jdbcType="VARCHAR"/>
+		<result property="price"		column="price"				jdbcType="NUMERIC"/>
+		<result property="tranCode"		column="tranCode"			jdbcType="VARCHAR"/>
+		<result property="regDate"		column="reg_date"			jdbcType="DATE"/>
+		
+	</resultMap>
+	
+	
+	<select id="listBasket" parameterType="java.util.Map" resultMap="basketMap">
+	
+		SELECT
+			*
+			FROM
+				(
+				SELECT
+				ROWNUM no, insub.*
+				FROM
+					(
+					SELECT
+					b.basket_no,b.user_id,b.reg_date,
+					p.prod_no, p.prod_name, p.price,
+					NVL(t.tran_status_code,0) tranCode
+					FROM
+					basket b, product p, transaction t
+					WHERE b.prod_no(+) = p.prod_no
+					AND t.prod_no(+) = p.prod_no
+					AND b.user_id = #{user.userId}
+					ORDER BY basket_no
+					)insub
+				WHERE ROWNUM &lt;= #{search.endRowNum}
+				)outsub
+			WHERE outsub.no BETWEEN #{search.startRowNum} AND #{search.endRowNum}
+	</select>
+	
+	<select id="totalCount" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(*)
+		FROM basket
+		WHERE user_id = #{user.userId}
+	
+	</select>
+	
+	<insert id="insertBasket" parameterType="basket">
+		INSERT INTO basket(basket_no,user_id,prod_no,reg_date)
+		VALUES(seq_basket_basket_no.NEXTVAL, #{userId}, #{prodNo}, SYSDATE)
+	
+	</insert>
+	
+	<delete id="deleteBasket" parameterType="string">
+		delete basket
+		WHERE basket_no = #{value}
+	</delete>
+</mapper>

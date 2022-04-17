@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="PurchaseMapper">
+	<resultMap type="purchase" id="purchaseMap">
+		<result property="tranNo" column="tran_no" jdbcType="NUMERIC" />
+		<result property="paymentOption" column="payment_option" jdbcType="VARCHAR" />
+		<result property="receiverName" column="receiver_name" jdbcType="VARCHAR" />
+		<result property="receiverPhone" column="receiver_phone" jdbcType="VARCHAR" />
+		<result property="receiverAddr" column="demailaddr" jdbcType="VARCHAR" />
+		<result property="receiverRequest" column="dlvy_request" jdbcType="VARCHAR" />
+		<result property="tranCode" column="tran_status_code" jdbcType="VARCHAR" />
+		<result property="orderDate" column="order_data" jdbcType="DATE" />
+		<result property="receiverDate" column="dlvy_date" jdbcType="VARCHAR" />
+		
+		<association property="buyer" javaType="com.model2.mvc.service.domain.User">
+			<result property="userId" column="buyer_id" jdbcType="VARCHAR" />
+		</association>
+		<association property="purchaseProd" javaType="com.model2.mvc.service.domain.Product">
+			<result property="prodNo" column="prod_no" jdbcType="NUMERIC" />
+		</association>
+	</resultMap>
+	
+	<insert id="insertPurchase" parameterType="purchase">
+		INSERT INTO
+		transaction(tran_no,
+					prod_no,
+					buyer_id,
+					payment_option,
+					receiver_name,
+					receiver_phone,
+					demailaddr,
+					dlvy_request,
+					tran_status_code,
+					order_data,
+					dlvy_date)
+		VALUES(seq_transaction_tran_no.NEXTVAL,
+				#{purchaseProd.prodNo},
+				#{buyer.userId},
+				#{paymentOption},
+				#{receiverName},
+				#{receiverPhone},
+				#{receiverAddr},
+				<if test="receiverRequest==null">
+					'요구사항없음'
+				</if>
+				<if test="receiverRequest!=null">
+					#{receiverRequest}
+				</if>,
+				1,
+				SYSDATE,
+				#{receiverDate})
+	</insert>
+	
+	<select id="listPurchase" parameterType="java.util.HashMap" resultMap="purchaseMap">
+		SELECT
+			outSub.no , outSub.*
+			FROM(
+						SELECT
+						ROWNUM no, inSub.*
+						FROM
+						(
+							SELECT
+							*
+							FROM
+							transaction
+							WHERE buyer_id = #{user.userId}
+							ORDER BY tran_no
+						)inSub
+						WHERE ROWNUM &lt;= #{search.endRowNum}
+			)outSub
+		WHERE outSub.no BETWEEN #{search.startRowNum} AND #{search.endRowNum}
+	</select>
+	
+	<select id="totalCount" parameterType="java.util.HashMap" resultType="int">
+		SELECT COUNT(*)
+		FROM transaction
+		WHERE buyer_id = #{user.userId}
+	
+	</select>
+	
+	<select id="getPurchase" parameterType="string" resultMap="purchaseMap">
+		SELECT * FROM
+		transaction
+		WHERE tran_no = #{value}
+	</select>
+	
+	<update id="updatePurchase" parameterType="purchase">
+		UPDATE transaction
+		SET 
+		payment_option = #{paymentOption},
+		receiver_name = #{receiverName},
+		receiver_phone = #{receiverPhone},
+		demailaddr = #{receiverAddr},
+		dlvy_request = #{receiverRequest},
+		dlvy_date = #{receiverDate}
+		WHERE tran_no = #{tranNo}
+	</update>
+	
+	<update id="updateTranCode" parameterType="java.util.Map">
+		update transaction
+		SET
+		tran_status_code = #{tranCode}
+		WHERE prod_no = #{prodNo}
+	</update>
+	
+	
+	
+</mapper>
