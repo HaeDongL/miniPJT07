@@ -16,9 +16,13 @@
 		<result property="fileName"		column="image_file"			jdbcType="VARCHAR" />
 		<result property="regDate"		column="reg_date"			jdbcType="DATE" />
 		<result property="proTranCode"  column="tranCode"   jdbcType="VARCHAR"/>
+		<result property="quantity"		column="quantity"	jdbcType="NUMERIC"/>
+	</resultMap>
+	<resultMap id="productNo" type="product">
+		<result property="prodNo"		column="prod_no"	jdbcType="NUMERIC"/>
 	</resultMap>
 	
-	<insert id="addProduct" parameterType="product">
+	<insert id="insertProduct" parameterType="product">
 		INSERT INTO
 		product
 		VALUES(	seq_product_prod_no.NEXTVAL,
@@ -36,11 +40,12 @@
 					ROWNUM no, insub.*
 					FROM(
 						SELECT
-						p.*, NVL(t.tran_status_code,0) tranCode
+						p.*, NVL(t.tran_status_code,0) tranCode, NVL(s.quantity,0) quantity
 						FROM
-						product p, transaction t
+						product p, transaction t, stock s
 					<where>
-					t.prod_no(+) = p.prod_no
+						t.prod_no(+) = p.prod_no
+						AND s.prod_no(+) = p.prod_no
 					<if test='searchKeyword != null'>
 						
 									<if test="searchCondition==0 and searchKeyword!=''">
@@ -124,6 +129,27 @@
 	 			manufacture_day=#{manuDate},
 	 			price=#{price},
 	 			image_file=#{fileName}
+	 		WHERE prod_no = #{prodNo}
+	 </update>
+	 
+	 <select id="getLastProdNo" resultMap="productNo">
+	 		SELECT MAX(prod_no) prod_no
+			FROM product
+	 </select>
+	 
+	 <insert id="insertStock" parameterType="product">
+	 		INSERT INTO stock(prod_no,quantity)
+	 		VALUES(
+	 		#{prodNo},
+	 		#{quantity}
+	 		)
+	 
+	 </insert>
+	 
+	 <update id="updateStock" parameterType="product">
+	 		UPDATE stock
+	 		SET
+	 		quantity = #{quantity}
 	 		WHERE prod_no = #{prodNo}
 	 </update>
 	 

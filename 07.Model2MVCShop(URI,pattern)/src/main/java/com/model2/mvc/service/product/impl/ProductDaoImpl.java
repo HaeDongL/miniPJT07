@@ -29,7 +29,9 @@ public class ProductDaoImpl implements ProductDao {
 	@Override
 	public void addProduct(Product product) throws Exception {
 		product.setManuDate(product.getManuDate().replace("-", ""));
-		sqlSession.insert("ProductMapper.addProduct",product);
+		sqlSession.insert("ProductMapper.insertProduct",product);
+		product = sqlSession.selectOne("ProductMapper.getLastProdNo");
+		sqlSession.insert("ProductMapper.insertStock",product);
 	}
 
 	@Override
@@ -57,6 +59,7 @@ public class ProductDaoImpl implements ProductDao {
 	@Override
 	public void updateProduct(Product product) throws Exception {
 		int i = sqlSession.update("ProductMapper.updateProduct",product);
+		sqlSession.update("ProductMapper.updateStock",product);
 		System.out.println("1이나오면 업데이트 완료 :"+i);
 	}
 

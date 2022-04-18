@@ -11,6 +11,7 @@ public class Product {
 	private int prodNo;
 	private Date regDate;
 	private String proTranCode;
+	private int quantity;
 	
 	public Product(){
 	}
@@ -64,12 +65,22 @@ public class Product {
 		this.regDate = regDate;
 	}
 
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
 	@Override
 	public String toString() {
 		return "Product [fileName=" + fileName + ", manuDate=" + manuDate + ", price=" + price + ", prodDetail="
 				+ prodDetail + ", prodName=" + prodName + ", prodNo=" + prodNo + ", regDate=" + regDate
-				+ ", proTranCode=" + proTranCode + "]";
+				+ ", proTranCode=" + proTranCode + ", quantity=" + quantity + "]";
 	}
+
+	
 
 
 }

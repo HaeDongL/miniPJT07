@@ -144,7 +144,18 @@ function fncAddProduct(){
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
 			<input	type="text" name="fileName" class="ct_input_g" 
-						style="width: 200px; height: 19px" maxLength="13" value=${product.fileName } />
+						style="width: 250px; height: 19px" maxLength="20" value=${product.fileName } />
+		</td>
+	</tr>
+	<tr>
+		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
+	</tr>
+	<tr>
+		<td width="104" class="ct_write">상품재고</td>
+		<td bgcolor="D6D6D6" width="1"></td>
+		<td class="ct_write01">
+			<input	type="text" name="quantity" class="ct_input_g" 
+						style="width: 50px; height: 19px" maxLength="20" value=${product.quantity } />&nbsp;개
 		</td>
 	</tr>
 	<tr>
