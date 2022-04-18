@@ -87,10 +87,11 @@
 	 <select id="getProduct" parameterType="int" resultMap="productSelectMap">
 	 
 	  	SELECT 
-	  	p.*, NVL(t.tran_status_code,0) tranCode 
+	  	p.*, NVL(t.tran_status_code,0) tranCode,s.quantity
 	  	FROM
-		product p, transaction t
+		product p, transaction t, stock s
 		WHERE t.prod_no(+) = p.prod_no
+		AND s.prod_no(+) = p.prod_no
 		AND p.prod_no = #{value}
 	 
 	 </select>
@@ -132,7 +133,7 @@
 	 		WHERE prod_no = #{prodNo}
 	 </update>
 	 
-	 <select id="getLastProdNo" resultMap="productNo">
+	 <select id="getLastProdNo" resultType="int">
 	 		SELECT MAX(prod_no) prod_no
 			FROM product
 	 </select>

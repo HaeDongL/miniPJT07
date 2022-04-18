@@ -30,7 +30,8 @@ public class ProductDaoImpl implements ProductDao {
 	public void addProduct(Product product) throws Exception {
 		product.setManuDate(product.getManuDate().replace("-", ""));
 		sqlSession.insert("ProductMapper.insertProduct",product);
-		product = sqlSession.selectOne("ProductMapper.getLastProdNo");
+		int maxProdNo = sqlSession.selectOne("ProductMapper.getLastProdNo");
+		product.setProdNo(maxProdNo);
 		sqlSession.insert("ProductMapper.insertStock",product);
 	}
 

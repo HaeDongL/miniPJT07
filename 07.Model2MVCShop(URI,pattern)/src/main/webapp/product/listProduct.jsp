@@ -109,6 +109,9 @@
 		<td class="ct_list_b">등록일</td>	
 		<td class="ct_line02"></td>
 		<td class="ct_list_b">현재상태</td>
+		<td class="ct_line02"></td>
+		<td class="ct_list_b">남은 수량</td>
+		<td class="ct_line02"></td>
 	</tr>
 	<tr>
 		<td colspan="11" bgcolor="808285" height="1"></td>
@@ -146,15 +149,26 @@
 			<td align="left">배송완료</td> <%-- 추후 상품구매관리할때 변경할것. --%>
 			</c:if>			
 		</c:if>
-		
 		<c:if test = "${menu == 'search'}">
+			
+			<c:if test="${product.quantity != 0 }">
+				<td align="left">판매중</td>
+			</c:if>
+			<c:if test="${product.quantity == 0 }">
+				<td align="left">재고없음</td>
+			</c:if>
+			<%-- 
 			<c:if test="${product.proTranCode == 0}">
-			<td align="left">판매중</td> <%-- 추후 상품구매관리할때 변경할것. --%>
+			<td align="left">판매중</td> 
 			</c:if>
 			<c:if test="${product.proTranCode == 1 || product.proTranCode == 2 || product.proTranCode == 3}">
-			<td align="left">재고없음</td> <%-- 추후 상품구매관리할때 변경할것. --%>
+			<td align="left">재고없음</td> 
 			</c:if>
-		</c:if>	
+			--%>
+		</c:if>
+		<td></td>
+		<td align="left">${product.quantity}</td>
+		<td></td>
 	</tr>
 	<tr>
 		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
