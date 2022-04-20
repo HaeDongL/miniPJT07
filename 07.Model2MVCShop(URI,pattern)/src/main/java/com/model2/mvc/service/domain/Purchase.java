@@ -14,7 +14,14 @@ public class Purchase {
 	String receiverPhone;
 	String tranCode;
 	int tranNo;
+	int buyQuantity;
 	
+	public int getBuyQuantity() {
+		return buyQuantity;
+	}
+	public void setBuyQuantity(int buyQuantity) {
+		this.buyQuantity = buyQuantity;
+	}
 	public User getBuyer() {
 		return buyer;
 	}
@@ -88,8 +95,10 @@ public class Purchase {
 		return "Purchase [buyer=" + buyer + ", purchaseProd=" + purchaseProd + ", receiverAddr=" + receiverAddr
 				+ ", receiverDate=" + receiverDate + ", receiverRequest=" + receiverRequest + ", orderDate=" + orderDate
 				+ ", paymentOption=" + paymentOption + ", receiverName=" + receiverName + ", receiverPhone="
-				+ receiverPhone + ", tranCode=" + tranCode + ", tranNo=" + tranNo + "]";
+				+ receiverPhone + ", tranCode=" + tranCode + ", tranNo=" + tranNo + ", buyQuantity=" + buyQuantity
+				+ "]";
 	}
+	
 	
 	
 	

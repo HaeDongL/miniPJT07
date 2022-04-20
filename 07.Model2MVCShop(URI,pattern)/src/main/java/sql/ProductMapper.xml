@@ -101,8 +101,6 @@
 	 
 	 
 	 
-	 
-	 
 	 <!-- 
 	 <select id="getProduct" parameterType="search" resultMap="productSelectMap">
 				SELECT
@@ -152,6 +150,20 @@
 	 		SET
 	 		quantity = #{quantity}
 	 		WHERE prod_no = #{prodNo}
+	 </update>
+	 
+	 <update id="minusStock" parameterType="purchase">
+	 		UPDATE stock
+	 		SET
+	 		quantity = quantity - #{buyQuantity}
+	 		WHERE prod_no = #{purchaseProd.prodNo}
+	 </update>
+	 
+	  <update id="plusStock" parameterType="purchase">
+	 		UPDATE stock
+	 		SET
+	 		quantity = quantity + #{buyQuantity}
+	 		WHERE prod_no = #{purchaseProd.prodNo}
 	 </update>
 	 
 	 <delete id="deleteProduct" parameterType="string">

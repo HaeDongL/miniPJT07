@@ -18,4 +18,6 @@ public interface PurchaseDao {
 	public void deletePurchase(int tranNo)throws Exception;
 	
 	public void updateTranCode(Map<String,Object> map)throws Exception;
+	
+	public Map<String,Object> requestPurchaseList(Map<String,Object> map)throws Exception;
 }

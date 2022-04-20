@@ -51,6 +51,12 @@ public class PurchaseServiceImpl implements PurchaseService {
 		
 	}
 
+	@Override
+	public Map<String, Object> requsetPuerchaseList(Map<String, Object> map) throws Exception {
+		
+		return purchaseDaoImpl.requestPurchaseList(map);
+	}
+
 
 	
 

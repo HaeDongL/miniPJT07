@@ -15,7 +15,7 @@ Search search = (Search)request.getAttribute("search");
 %>
 <html>
 <head>
-<title>구매 목록조회</title>
+<title>구매요청페이지</title>
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 <script type="text/javascript">
@@ -38,7 +38,7 @@ Search search = (Search)request.getAttribute("search");
 		<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left: 10px;">
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
-					<td width="93%" class="ct_ttl01">구매 목록조회</td>
+					<td width="93%" class="ct_ttl01">구매요청 목록</td>
 				</tr>
 			</table>
 		</td>
@@ -53,15 +53,13 @@ Search search = (Search)request.getAttribute("search");
 	<tr>
 		<td class="ct_list_b" width="100">No</td>
 		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="150">상품명</td>
+		<td class="ct_list_b" width="150">회원ID</td>
 		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="150">구매 수량</td>
+		<td class="ct_list_b" width="150">회원명</td>
 		<td class="ct_line02"></td>
-		<td class="ct_list_b">결재금액</td>
+		<td class="ct_list_b">전화번호</td>
 		<td class="ct_line02"></td>
 		<td class="ct_list_b">배송현황</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b">정보수정</td>
 	</tr>
 	<tr>
 		<td colspan="11" bgcolor="808285" height="1"></td>
@@ -72,40 +70,32 @@ Search search = (Search)request.getAttribute("search");
 	<tr class="ct_list_pop">
 		<td align="center">
 		<c:set var="count" value="${count+1}"/>
-			${count}
+			<a href="/purchase/getPurchase?tranNo=${purchase.tranNo }">${count}</a>
 		</td>
 		<td></td>
 		<td align="left">
-			<a href="/product/getProduct?prodNo=${purchase.purchaseProd.prodNo }">${purchase.purchaseProd.prodName }</a>
+			<a href="/user/getUser?userId=${purchase.buyer.userId }">${purchase.buyer.userId }</a>
 		</td>
 		<td></td>
-		<td align="left">${purchase.buyQuantity }</td>
+		<td align="left">${purchase.receiverName }</td>
 		<td></td>
-		<td align="left">${purchase.purchaseProd.price * purchase.buyQuantity }원</td>
+		<td align="left">${purchase.receiverPhone }</td>
 		<td></td>
+		
+		<c:if test="${purchase.tranCode == 1}">
+			<td align="left">구매완료&nbsp;<a href="/purchase/updateTranCode?prodNo=${purchase.purchaseProd.prodNo}&menu=${menu}&tranCode=2">배송하기</a></td> 
+			</c:if>
+			<c:if test="${purchase.tranCode == 2}">
+			<td align="left">배송중</td> 
+			</c:if>
+			<c:if test="${purchase.tranCode == 3}">
+			<td align="left">배송완료</td> 
+		</c:if>
+		</td>
+		<td></td>
+		<td align="left">
 			
-		<td align="left">
-		<c:if test="${purchase.tranCode == 1 }">
-			현재 구입완료 상태 입니다.
-		</c:if>
-		<c:if test="${purchase.tranCode == 2 }">
-			현재 구입완료 상태 입니다.<a href="/purchase/updateTranCode?prodNo=${purchase.purchaseProd.prodNo }&tranCode=3">물건도착</a>
-		</c:if>
-		<c:if test="${purchase.tranCode == 3 }">
-			현재 배송완료 상태 입니다.
-		</c:if>
 		</td>
-		<td></td>
-		<c:if test="${purchase.tranCode == 1 }">	
-		<td align="left">
-			<a href="/purchase/getPurchase?tranNo=${purchase.tranNo }">정보수정</a>
-		</td>
-		</c:if>
-		<c:if test="${purchase.tranCode == 2 || purchase.tranCode == 3 }">	
-		<td align="left">
-			수정불가
-		</td>
-		</c:if>
 	</tr>
 	</c:forEach><%--end For --%>
 	

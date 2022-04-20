@@ -60,7 +60,7 @@
 		<td>${purchase.receiverAddr }</td>
 		<td></td>
 	</tr>
-		<tr>
+	<tr>
 		<td>구매요청사항</td>
 		<td>${purchase.receiverRequest }</td>
 		<td></td>
@@ -70,8 +70,18 @@
 		<td>${purchase.receiverDate }</td>
 		<td></td>
 	</tr>
+	<tr>
+		<td>구매개수</td>
+		<td>${purchase.buyQuantity }개</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>결재금액</td>
+		<td>${purchase.purchaseProd.price }원</td>
+		<td></td>
+	</tr>
 </table>
-</form>
+
 
 </body>
 </html>

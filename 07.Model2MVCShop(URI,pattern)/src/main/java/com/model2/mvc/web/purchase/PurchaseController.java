@@ -117,10 +117,16 @@ public class PurchaseController {
 	
 	@RequestMapping(value = "updatePurchase",method = RequestMethod.GET)
 	public ModelAndView updatePurchaseViewAction(ModelAndView modelAndView,
-												Purchase purchase,         
-												@RequestParam String tranNo)throws Exception{
+												Purchase purchase,
+												Product product,
+												HttpSession session,
+												@RequestParam String tranNo,
+												@RequestParam int prodNo)throws Exception{
+		
 		purchase = purchaseServiceImpl.getPurchase(tranNo);
+		product = productServiceImpl.getProduct(prodNo);
 		modelAndView.addObject("purchase",purchase);
+		modelAndView.addObject("product",product);
 		modelAndView.setViewName("/purchase/updatePurchaseView.jsp");
 		
 		
@@ -129,8 +135,17 @@ public class PurchaseController {
 	
 	@RequestMapping(value = "updatePurchase",method = RequestMethod.POST)
 	public ModelAndView updatePurchaseAction(ModelAndView modelAndView,
+											 HttpSession session,
+											 User user,
 											 @ModelAttribute Purchase purchase,
+											 @ModelAttribute Product product,
 											 @RequestParam String tranNo)throws Exception{
+		user = (User)session.getAttribute("user");
+		purchase.setBuyer(user);
+		purchase.setPurchaseProd(product);
+		System.out.println("user "+purchase.getBuyer().getUserId());
+		System.out.println("prodNo"+product.getProdNo());
+		
 		System.out.println("updatePurchase.do purchase"+ purchase);
 		
 		purchaseServiceImpl.updatePurchase(purchase);
@@ -151,10 +166,42 @@ public class PurchaseController {
 		map.put("tranCode", tranCode);
 		purchaseServiceImpl.updateTranCode(map);
 		if(menu.equals("manage")) {
-			modelAndView.setViewName("listProduct");
+			modelAndView.setViewName("/purchase/requestPurchaseList");
 		}else {
-			modelAndView.setViewName("listPurchase");
+			modelAndView.setViewName("/purchase/listPurchase");
 		}
+		return modelAndView;
+	}
+	
+	@RequestMapping("requestPurchaseList")
+	public ModelAndView requestPurchaseList(ModelAndView modelAndView,
+											HttpSession session,   	
+			                                Search search,
+			                                @RequestParam String menu,
+											Map<String,Object> map,
+											Map<String,Object> resultMap)throws Exception{
+		
+		if(search.getCurrentPage() ==0 ){
+			search.setCurrentPage(1);
+		}System.out.println(search);
+		search.setPageSize(pageSize);
+		
+		// Business logic ผ๖วเ
+		User user = (User)session.getAttribute("user");
+		System.out.println("listPurchase userId"+user.getUserId());
+		map.put("user",user);
+		map.put("search", search);
+		resultMap = purchaseServiceImpl.requsetPuerchaseList(map);
+		Page resultPage = new Page( search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		System.out.println(resultPage);
+		
+		modelAndView.addObject("list",resultMap.get("list"));
+		modelAndView.addObject("resultPage", resultPage);
+		modelAndView.addObject("menu",menu);
+		modelAndView.setViewName("/purchase/requestPurchaseList.jsp");
+		
+		
+		
 		return modelAndView;
 	}
 	

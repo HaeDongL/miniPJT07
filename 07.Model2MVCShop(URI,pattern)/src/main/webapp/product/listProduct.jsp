@@ -135,20 +135,30 @@
 		<td></td>
 		<td align="left">${product.regDate}</td>
 		<td></td>
+		
+		<c:if test = "${menu == 'manage'}">
+			<c:if test="${product.quantity != 0 }">
+				<td align="left">판매중</td>
+			</c:if>
+			<c:if test="${product.quantity == 0 }">
+				<td align="left">재고없음</td>
+			</c:if>
+		</c:if>
+		<%--
 		<c:if test = "${menu == 'manage'}">
 			<c:if test="${product.proTranCode == 0}">
-			<td align="left">판매중</td> <%-- 추후 상품구매관리할때 변경할것. --%>
+			<td align="left">판매중</td> 
 			</c:if>
 			<c:if test="${product.proTranCode == 1}">
-			<td align="left">구매완료&nbsp;<a href="/purchase/updateTranCode?tranCode=2&prodNo=${product.prodNo }&menu=${menu}">배송하기</a></td> <%-- 추후 상품구매관리할때 변경할것. --%>
+			<td align="left">구매완료&nbsp;<a href="/purchase/updateTranCode?tranCode=2&prodNo=${product.prodNo }&menu=${menu}">배송하기</a></td> 
 			</c:if>
 			<c:if test="${product.proTranCode == 2}">
-			<td align="left">배송중</td> <%-- 추후 상품구매관리할때 변경할것. --%>
+			<td align="left">배송중</td> 
 			</c:if>
 			<c:if test="${product.proTranCode == 3}">
-			<td align="left">배송완료</td> <%-- 추후 상품구매관리할때 변경할것. --%>
+			<td align="left">배송완료</td> 
 			</c:if>			
-		</c:if>
+		</c:if> --%>
 		<c:if test = "${menu == 'search'}">
 			
 			<c:if test="${product.quantity != 0 }">
@@ -157,6 +167,7 @@
 			<c:if test="${product.quantity == 0 }">
 				<td align="left">재고없음</td>
 			</c:if>
+		</c:if>
 			<%-- 
 			<c:if test="${product.proTranCode == 0}">
 			<td align="left">판매중</td> 
@@ -165,7 +176,6 @@
 			<td align="left">재고없음</td> 
 			</c:if>
 			--%>
-		</c:if>
 		<td></td>
 		<td align="left">${product.quantity}</td>
 		<td></td>

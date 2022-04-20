@@ -15,14 +15,20 @@
 		<result property="tranCode" column="tran_status_code" jdbcType="VARCHAR" />
 		<result property="orderDate" column="order_data" jdbcType="DATE" />
 		<result property="receiverDate" column="dlvy_date" jdbcType="VARCHAR" />
+		<result property="buyQuantity" column="buy_quantity" jdbcType="NUMERIC" />
 		
 		<association property="buyer" javaType="com.model2.mvc.service.domain.User">
 			<result property="userId" column="buyer_id" jdbcType="VARCHAR" />
 		</association>
 		<association property="purchaseProd" javaType="com.model2.mvc.service.domain.Product">
 			<result property="prodNo" column="prod_no" jdbcType="NUMERIC" />
+			<result property="prodName" column="prod_name" jdbcType="VARCHAR" />
+			<result property="price" column="price" jdbcType="NUMERIC" />
 		</association>
 	</resultMap>
+	
+	
+	
 	
 	<insert id="insertPurchase" parameterType="purchase">
 		INSERT INTO
@@ -36,7 +42,8 @@
 					dlvy_request,
 					tran_status_code,
 					order_data,
-					dlvy_date)
+					dlvy_date,
+					buy_quantity)
 		VALUES(seq_transaction_tran_no.NEXTVAL,
 				#{purchaseProd.prodNo},
 				#{buyer.userId},
@@ -52,7 +59,8 @@
 				</if>,
 				1,
 				SYSDATE,
-				#{receiverDate})
+				#{receiverDate},
+				#{buyQuantity})
 	</insert>
 	
 	<select id="listPurchase" parameterType="java.util.HashMap" resultMap="purchaseMap">
@@ -64,10 +72,11 @@
 						FROM
 						(
 							SELECT
-							*
+							t.*, p.prod_name, p.price
 							FROM
-							transaction
-							WHERE buyer_id = #{user.userId}
+							transaction t, product p
+							WHERE t.prod_no = p.prod_no
+							AND buyer_id = #{user.userId}
 							ORDER BY tran_no
 						)inSub
 						WHERE ROWNUM &lt;= #{search.endRowNum}
@@ -80,6 +89,11 @@
 		FROM transaction
 		WHERE buyer_id = #{user.userId}
 	
+	</select>
+	
+	<select id="purchaseTotalCount" parameterType="java.util.HashMap" resultType="int">
+		SELECT COUNT(*)
+		FROM transaction
 	</select>
 	
 	<select id="getPurchase" parameterType="string" resultMap="purchaseMap">
@@ -96,7 +110,8 @@
 		receiver_phone = #{receiverPhone},
 		demailaddr = #{receiverAddr},
 		dlvy_request = #{receiverRequest},
-		dlvy_date = #{receiverDate}
+		dlvy_date = #{receiverDate},
+		buy_quantity = #{buyQuantity}
 		WHERE tran_no = #{tranNo}
 	</update>
 	
@@ -107,6 +122,33 @@
 		WHERE prod_no = #{prodNo}
 	</update>
 	
+	<select id="selectBuyQuantity" parameterType="purchase" resultType="int">
+		SELECT
+		buy_quantity
+		FROM transaction
+		WHERE buyer_id = #{buyer.userId}
+		AND prod_no = #{purchaseProd.prodNo}
+		AND tran_no = #{tranNo}
+	</select>
+	
+	<select id="requestPurchaseList" parameterType="java.util.HashMap" resultMap="purchaseMap">
+		SELECT
+			outSub.no , outSub.*
+			FROM(
+						SELECT
+						ROWNUM no, inSub.*
+						FROM
+						(
+							SELECT
+							*
+							FROM
+							transaction
+							ORDER BY tran_no
+						)inSub
+						WHERE ROWNUM &lt;= #{search.endRowNum}
+			)outSub
+		WHERE outSub.no BETWEEN #{search.startRowNum} AND #{search.endRowNum}
+	</select>
 	
 	
 </mapper>

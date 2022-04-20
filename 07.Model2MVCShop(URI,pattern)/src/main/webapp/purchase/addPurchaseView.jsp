@@ -3,6 +3,7 @@
 <%@page import="com.model2.mvc.service.domain.User"%>
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <%--
 <%
@@ -17,6 +18,8 @@
 <head>
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
+<script src="../javascript/jquery-2.1.4.js" type="text/javascript"></script>
+
 
 <title>Insert title here</title>
 
@@ -56,7 +59,7 @@ function fncAddPurchase() {
 </table>
 
 <input type="hidden" name="prodNo" value="${requestScope.product.prodNo }" />
-
+<input type="hidden" name="price" value="${product.price }" />
 <table width="600" border="0" cellspacing="0" cellpadding="0"	align="center" style="margin-top: 13px;">
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
@@ -198,6 +201,23 @@ function fncAddPurchase() {
 							style="width: 100px; height: 19px" maxLength="20"/>
 			<img 	src="../images/ct_icon_date.gif" width="15" height="15"	
 						onclick="show_calendar('document.addPurchase.receiverDate', document.addPurchase.receiverDate.value)"/>
+		</td>
+	</tr>
+	<tr>
+		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
+	</tr>
+	
+	<tr>
+		<td width="104" class="ct_write">구입 개수 </td>
+		<td bgcolor="D6D6D6" width="1"></td>
+		<td class="ct_write01">
+			<select name="buyQuantity">
+				<option>개수선택</option>
+				<c:forEach var="i" begin="1" step="1" end="${product.quantity }">
+					<option value="${i}">${i}</option>
+				</c:forEach>
+			</select>
+			개
 		</td>
 	</tr>
 	<tr>

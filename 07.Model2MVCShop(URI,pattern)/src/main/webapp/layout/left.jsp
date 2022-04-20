@@ -103,6 +103,13 @@ function history(){
 			</tr>
 			</c:if>
 			
+			<c:if test="${user.role == 'admin'}">
+					<tr>
+						<td class="Depth03" >
+							<a href="/purchase/requestPurchaseList?menu=manage" target="rightFrame">구매요청페이지</a>
+						</td>
+					</tr>
+				</c:if>
 			
 			<tr>
 				<td class="DepthEnd">&nbsp;</td>
