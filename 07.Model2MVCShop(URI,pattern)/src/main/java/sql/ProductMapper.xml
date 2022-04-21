@@ -15,7 +15,6 @@
 		<result property="price"		column="price"				jdbcType="NUMERIC" />
 		<result property="fileName"		column="image_file"			jdbcType="VARCHAR" />
 		<result property="regDate"		column="reg_date"			jdbcType="DATE" />
-		<result property="proTranCode"  column="tranCode"   jdbcType="VARCHAR"/>
 		<result property="quantity"		column="quantity"	jdbcType="NUMERIC"/>
 	</resultMap>
 	<resultMap id="productNo" type="product">
@@ -40,12 +39,11 @@
 					ROWNUM no, insub.*
 					FROM(
 						SELECT
-						p.*, NVL(t.tran_status_code,0) tranCode, NVL(s.quantity,0) quantity
+						p.*, NVL(s.quantity,0) quantity
 						FROM
-						product p, transaction t, stock s
+						product p, stock s
 					<where>
-						t.prod_no(+) = p.prod_no
-						AND s.prod_no(+) = p.prod_no
+						s.prod_no(+) = p.prod_no
 					<if test='searchKeyword != null'>
 						
 									<if test="searchCondition==0 and searchKeyword!=''">
@@ -87,11 +85,10 @@
 	 <select id="getProduct" parameterType="int" resultMap="productSelectMap">
 	 
 	  	SELECT 
-	  	p.*, NVL(t.tran_status_code,0) tranCode,s.quantity
+	  	p.*,s.quantity
 	  	FROM
-		product p, transaction t, stock s
-		WHERE t.prod_no(+) = p.prod_no
-		AND s.prod_no(+) = p.prod_no
+		product p, stock s
+		WHERE s.prod_no(+) = p.prod_no
 		AND p.prod_no = #{value}
 	 
 	 </select>
