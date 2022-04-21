@@ -158,11 +158,11 @@ public class PurchaseController {
 	@RequestMapping("updateTranCode")
 	public ModelAndView updateTranCodeAction(ModelAndView modelAndView,
 											 @RequestParam String tranCode,
-											 @RequestParam int prodNo,
+											 @RequestParam int tranNo,
 											 Map<String,Object> map,
 											 @RequestParam(defaultValue = "") String menu)throws Exception{
 		System.out.println("updateTranCode");
-		map.put("prodNo", prodNo);
+		map.put("tranNo", tranNo);
 		map.put("tranCode", tranCode);
 		purchaseServiceImpl.updateTranCode(map);
 		if(menu.equals("manage")) {

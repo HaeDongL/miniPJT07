@@ -30,8 +30,8 @@ Search search = (Search)request.getAttribute("search");
 
 <div style="width: 98%; margin-left: 10px;">
 
-<form name="detailForm" action="/purchase/listPurchase" method="post">
-
+<form name="detailForm" action="/purchase/requestPurchaseList" method="post">
+<input type="hidden" name="menu" value="manage" />
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
 		<td width="15" height="37"><img src="/images/ct_ttl_img01.gif"width="15" height="37"></td>
@@ -57,9 +57,16 @@ Search search = (Search)request.getAttribute("search");
 		<td class="ct_line02"></td>
 		<td class="ct_list_b" width="150">회원명</td>
 		<td class="ct_line02"></td>
-		<td class="ct_list_b">전화번호</td>
+		<td class="ct_list_b" width="150">전화번호</td>
+		<td class="ct_line02"></td>
+		<td class="ct_list_b">상품이름</td>
+		<td class="ct_line02"></td>
+		<td class="ct_list_b">구매개수</td>
+		<td class="ct_line02"></td>
+		<td class="ct_list_b">결재금액</td>
 		<td class="ct_line02"></td>
 		<td class="ct_list_b">배송현황</td>
+		<td class="ct_line02"></td>
 	</tr>
 	<tr>
 		<td colspan="11" bgcolor="808285" height="1"></td>
@@ -81,9 +88,15 @@ Search search = (Search)request.getAttribute("search");
 		<td></td>
 		<td align="left">${purchase.receiverPhone }</td>
 		<td></td>
+		<td align="left">${purchase.purchaseProd.prodName }</td>
+		<td></td>
+		<td align="left">${purchase.buyQuantity }</td>
+		<td></td>
+		<td align="left">${purchase.buyQuantity * purchase.purchaseProd.price }</td>
+		<td></td>
 		
 		<c:if test="${purchase.tranCode == 1}">
-			<td align="left">구매완료&nbsp;<a href="/purchase/updateTranCode?prodNo=${purchase.purchaseProd.prodNo}&menu=${menu}&tranCode=2">배송하기</a></td> 
+			<td align="left">구매완료&nbsp;<a href="/purchase/updateTranCode?tranNo=${purchase.tranNo }&menu=${menu}&tranCode=2">배송하기</a></td> 
 			</c:if>
 			<c:if test="${purchase.tranCode == 2}">
 			<td align="left">배송중</td> 

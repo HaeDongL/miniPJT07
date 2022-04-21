@@ -89,7 +89,7 @@ Search search = (Search)request.getAttribute("search");
 			현재 구입완료 상태 입니다.
 		</c:if>
 		<c:if test="${purchase.tranCode == 2 }">
-			현재 구입완료 상태 입니다.<a href="/purchase/updateTranCode?prodNo=${purchase.purchaseProd.prodNo }&tranCode=3">물건도착</a>
+			현재 구입완료 상태 입니다.<a href="/purchase/updateTranCode?tranNo=${purchase.tranNo }&tranCode=3">물건도착</a>
 		</c:if>
 		<c:if test="${purchase.tranCode == 3 }">
 			현재 배송완료 상태 입니다.

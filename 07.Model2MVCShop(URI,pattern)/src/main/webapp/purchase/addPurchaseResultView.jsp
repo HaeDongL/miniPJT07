@@ -77,7 +77,7 @@
 	</tr>
 	<tr>
 		<td>결재금액</td>
-		<td>${purchase.purchaseProd.price }원</td>
+		<td>${purchase.purchaseProd.price * purchase.buyQuantity }원</td>
 		<td></td>
 	</tr>
 </table>

@@ -116,10 +116,10 @@
 	</update>
 	
 	<update id="updateTranCode" parameterType="java.util.Map">
-		update transaction
+		UPDATE transaction
 		SET
 		tran_status_code = #{tranCode}
-		WHERE prod_no = #{prodNo}
+		WHERE tran_no = #{tranNo}
 	</update>
 	
 	<select id="selectBuyQuantity" parameterType="purchase" resultType="int">
@@ -140,10 +140,11 @@
 						FROM
 						(
 							SELECT
-							*
+							t.*,p.prod_name,p.price
 							FROM
-							transaction
-							ORDER BY tran_no
+							transaction t, product p
+							WHERE t.prod_no = p.prod_no
+							ORDER BY t.tran_no
 						)inSub
 						WHERE ROWNUM &lt;= #{search.endRowNum}
 			)outSub
