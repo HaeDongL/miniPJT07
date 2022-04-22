@@ -77,7 +77,7 @@ Search search = (Search)request.getAttribute("search");
 		</td>
 		<td></td>
 		<td align="left">
-			<a href="/getProduct.do?prodNo=${basket.prodNo }&menu=search">${basket.prodName }</a>
+			<a href="/product/getProduct?prodNo=${basket.prodNo }&menu=search">${basket.prodName }</a>
 		</td>
 		<td></td>
 		<td align="left">${basket.price }</td>

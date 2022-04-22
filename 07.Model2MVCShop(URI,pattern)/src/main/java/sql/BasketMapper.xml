@@ -19,28 +19,28 @@
 	
 	<select id="listBasket" parameterType="java.util.Map" resultMap="basketMap">
 	
-		SELECT
+		    SELECT
 			*
 			FROM
 				(
-				SELECT
-				ROWNUM no, insub.*
-				FROM
-					(
-					SELECT
-					b.basket_no,b.user_id,b.reg_date,
-					p.prod_no, p.prod_name, p.price,
-					NVL(t.tran_status_code,0) tranCode
-					FROM
-					basket b, product p, transaction t
-					WHERE b.prod_no(+) = p.prod_no
-					AND t.prod_no(+) = p.prod_no
-					AND b.user_id = #{user.userId}
-					ORDER BY basket_no
-					)insub
-				WHERE ROWNUM &lt;= #{search.endRowNum}
-				)outsub
-			WHERE outsub.no BETWEEN #{search.startRowNum} AND #{search.endRowNum}
+							SELECT
+							ROWNUM no, insub.*
+							FROM
+								(
+										SELECT
+										b.basket_no,b.user_id,b.reg_date,
+										p.prod_no, p.prod_name, p.price
+										FROM
+										basket b, product p
+										WHERE b.prod_no(+) = p.prod_no
+										AND b.user_id = #{user.userId}
+										ORDER BY basket_no
+								)
+							insub
+							WHERE ROWNUM &lt;= #{search.endRowNum}
+				)
+			outsub
+		    WHERE outsub.no BETWEEN #{search.startRowNum} AND #{search.endRowNum}
 	</select>
 	
 	<select id="totalCount" parameterType="java.util.Map" resultType="int">
