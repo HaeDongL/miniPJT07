@@ -53,7 +53,7 @@ function resetData(){
 
 <body bgcolor="#ffffff" text="#000000">
 
-<form name="detailForm" method="post">
+<form name="detailForm" method="post" enctype="multipart/form-data">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -162,8 +162,8 @@ function resetData(){
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
 		<c:if test="${empty product}">
-			<input		type="text" name="fileName" class="ct_input_g" 
-							style="width: 250px; height: 19px" maxLength="20"/>
+			<input		type="file" name="file" class="ct_input_g" 
+							style="width: 250px; height: 20px" maxLength="20" />
 		</c:if>	
 		<c:if test="${!empty product}">
 			<img src="/images/uploadFiles/${product.fileName }" width="200" height="200" align="absmiddle"/>
