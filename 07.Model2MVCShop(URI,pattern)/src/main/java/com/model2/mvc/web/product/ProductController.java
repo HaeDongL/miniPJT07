@@ -53,7 +53,7 @@ public class ProductController {
 	public String addProductAction(@ModelAttribute("product") Product product,
 									MultipartHttpServletRequest mtfRequest)throws Exception{
 		////////////////FileUpload 구간////////////////////////////////////////
-		String path = "C:\\Users\\이현동\\git\\miniPJT07\\07.Model2MVCShop(URI,pattern)\\src\\main\\webapp\\images\\uploadFiles\\";
+		String path = "C:\\Users\\bitcamp\\git\\miniPJT07\\07.Model2MVCShop(URI,pattern)\\src\\main\\webapp\\images\\uploadFiles\\";
 		// => 절대경로이고 여기서 부터 상대경로로 표현... 해도 위치가 바끼면 결국 사용자이름까지 찾아와서 변경해야하는건 같음.
 		MultipartFile mf = mtfRequest.getFile("file");//=> 읽어드릴 파일이 있는 input의 name
 		// 이 부분을 getParameter같은걸로 읽어서 바인딩하면 String타입으로 파일 이름만 들어옴.
@@ -138,11 +138,48 @@ public class ProductController {
 		return "/product/updateProductView.jsp";
 	}
 	
+	
+	
+	//////////////////////////파일 업데이트 포함//////////////////////////////
 	@RequestMapping(value = "updateProduct",method = RequestMethod.POST)
 	public String updateProductAction(@RequestParam int prodNo,
 									  @RequestParam String menu,
-									  @ModelAttribute Product product)throws Exception {
+									  @ModelAttribute Product product,
+									  MultipartHttpServletRequest mtfRequest)throws Exception {
 										//바인딩중 오류 도메인객체 수정(setter)
+		
+		
+		////////////////FileUpload 구간////////////////////////////////////////
+		String path = "C:\\Users\\bitcamp\\git\\miniPJT07\\07.Model2MVCShop(URI,pattern)\\src\\main\\webapp\\images\\uploadFiles\\";
+		// => 절대경로이고 여기서 부터 상대경로로 표현... 해도 위치가 바끼면 결국 사용자이름까지 찾아와서 변경해야하는건 같음.
+		MultipartFile mf = mtfRequest.getFile("file");//=> 읽어드릴 파일이 있는 input의 name
+		// 이 부분을 getParameter같은걸로 읽어서 바인딩하면 String타입으로 파일 이름만 들어옴.
+		
+		String originFileName = mf.getOriginalFilename();
+		
+		String setFile = System.currentTimeMillis()+originFileName;
+		
+		String selfFile = path+System.currentTimeMillis()+originFileName;
+		
+		System.out.println("addProductAction selfFile  "+selfFile);
+		
+		product.setFileName(setFile);
+		
+		mf.transferTo(new File(selfFile));
+		
+		/*
+		 * try{
+		 * 		mf.transferTo(new File(selfFile));
+		 * }catch(IllegalStateException e) {
+		 * 		e.printStackTrace();
+		 * }catch (IOException e) {
+		 * 		e.printStackTrace();
+		 * }
+		 */
+		//////////////////////////////////////////////////////////////////////
+		
+		
+		
 		System.out.println("updateProductAction menu : "+menu);
 		System.out.println("/updateProduct.do");
 		System.out.println(product);
@@ -150,5 +187,7 @@ public class ProductController {
 		
 		return "/product/getProduct";
 	}
+	
+	//////////////////////////파일 업데이트 포함//////////////////////////////
 	
 }
